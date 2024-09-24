@@ -107,5 +107,22 @@ document.addEventListener('DOMContentLoaded', () => {
             return comment;
         });
         localStorage.setItem('comments', JSON.stringify(updatedComments));
+        displayComments(updatedComments);
+    }
+
+    // Handle dislike
+    function handleDislike(id) {
+        const comments = getComments();
+        const updatedComments = comments.map(comment => {
+            if (comment.id === id) {
+                comment.dislikes += 1;
+            }
+            return comment;
+        });
+        localStorage.setItem('comments', JSON.stringify(updatedComments));
+        displayComments(updatedComments);
+    }
+});
+
 
 
