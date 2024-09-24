@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microblogging App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container" id="login-section">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Username" />
+        <input type="password" id="password" placeholder="Password" />
+        <button id="login-btn">Login</button>
+    </div>
+
+    <div class="container" id="comment-section" style="display: none;">
+        <h3>Comment Section</h3>
+        <button id="logout-btn">Logout</button>
+        <input type="text" id="new-comment" placeholder="Add a comment..." />
+        <button id="add-comment-btn">Post Comment</button>
+        <div id="comments-container"></div>
+    </div>
+
+    
+
+    <script src="script.js"></script>
+</body>
+</html>
