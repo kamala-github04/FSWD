@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Check if user is already logged in
     const user = localStorage.getItem('user');
     if (user) {
-        showCommentSection();
+        showCommentSection(); // If already logged in, show comment section
     }
 
     // Login function
@@ -21,21 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (username && password) {
-            // Save user info in localStorage
+            // Simulate successful login and store user info in localStorage
             localStorage.setItem('user', username);
             showCommentSection();
+        } else {
+            alert("Please enter both username and password!"); // Error if inputs are empty
         }
     });
 
+    // Function to show comment section after login
     function showCommentSection() {
-        loginSection.style.display = 'none';
-        commentSection.style.display = 'block';
-        loadComments();
+        loginSection.style.display = 'none'; // Hide login section
+        commentSection.style.display = 'block'; // Show comment section
+        loadComments(); // Load the stored comments
     }
 
     // Logout function
     logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('user'); // Remove the user data
+        localStorage.removeItem('user'); // Remove the user data from storage
         loginSection.style.display = 'block'; // Show login section again
         commentSection.style.display = 'none'; // Hide comment section
     });
@@ -46,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newComment) {
             const comments = getComments();
             const comment = {
-                text: `${newComment} 😊🎉`,  // Adds emoji after the text
+                text: `${newComment} 😊🎉`,  // Adds emojis after the comment text
                 likes: 0,
                 dislikes: 0,
                 id: Date.now()
@@ -54,8 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
             comments.push(comment);
             localStorage.setItem('comments', JSON.stringify(comments));
             displayComments(comments);
-            newCommentInput.value = '';
-            commentsContainer.scrollIntoView({ behavior: 'smooth' });
+            newCommentInput.value = ''; // Clear input field after posting
         }
     });
 
@@ -97,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Handle like
+    // Handle like button functionality
     function handleLike(id) {
         const comments = getComments();
         const updatedComments = comments.map(comment => {
@@ -110,7 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
         displayComments(updatedComments);
     }
 
-    // Handle dislike
+    // Handle dislike button functionality
     function handleDislike(id) {
         const comments = getComments();
         const updatedComments = comments.map(comment => {
