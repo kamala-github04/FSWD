@@ -125,6 +125,10 @@ button:hover {
     filter: brightness(1.1);
 }
 
+.like-dislike-btn i {
+    font-size: 20px;
+}
+
 p {
     margin-bottom: 10px;
 }
@@ -135,4 +139,5 @@ p {
     font-size: 14px;
     margin-top: 20px;
 }
+
 
