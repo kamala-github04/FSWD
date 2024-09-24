@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newComment) {
             const comments = getComments();
             const comment = {
-                text: newComment,
+                text: `${newComment} 😊🎉`,  // Adds emoji after the text
                 likes: 0,
                 dislikes: 0,
                 id: Date.now()
@@ -82,12 +82,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const likeBtn = document.createElement('button');
             likeBtn.className = 'like-dislike-btn like';
-            likeBtn.textContent = `Like (${comment.likes})`;
+            likeBtn.innerHTML = `👍 (${comment.likes})`;  // Thumbs up emoji
             likeBtn.addEventListener('click', () => handleLike(comment.id));
 
             const dislikeBtn = document.createElement('button');
             dislikeBtn.className = 'like-dislike-btn dislike';
-            dislikeBtn.textContent = `Dislike (${comment.dislikes})`;
+            dislikeBtn.innerHTML = `👎 (${comment.dislikes})`;  // Thumbs down emoji
             dislikeBtn.addEventListener('click', () => handleDislike(comment.id));
 
             commentBox.appendChild(commentText);
@@ -107,20 +107,5 @@ document.addEventListener('DOMContentLoaded', () => {
             return comment;
         });
         localStorage.setItem('comments', JSON.stringify(updatedComments));
-        displayComments(updatedComments);
-    }
 
-    // Handle dislike
-    function handleDislike(id) {
-        const comments = getComments();
-        const updatedComments = comments.map(comment => {
-            if (comment.id === id) {
-                comment.dislikes += 1;
-            }
-            return comment;
-        });
-        localStorage.setItem('comments', JSON.stringify(updatedComments));
-        displayComments(updatedComments);
-    }
-});
 
