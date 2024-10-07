@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,15 +15,16 @@
         <button id="login-btn">Login</button>
     </div>
 
-    <div class="container" id="comment-section" style="display: none;">
-        <h3>Comment Section</h3>
+    <div class="container" id="post-section" style="display: none;">
+        <h3>Posts</h3>
         <button id="logout-btn">Logout</button>
         
-        
-        <textarea id="new-comment" placeholder="Add a comment..."></textarea>
-        <input type="file" id="image-upload" accept="image/*">
-        <button id="add-comment-btn">Post Comment</button>
-        <div id="comments-container"></div>
+        <div id="posts-container"></div>
+
+        <h4>Add a New Post</h4>
+        <textarea id="new-post" placeholder="What's on your mind?"></textarea>
+        <input type="file" id="post-image-upload" accept="image/*">
+        <button id="add-post-btn">Post</button>
     </div>
 
     <script src="script.js"></script>
