@@ -1,21 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const loginSection = document.getElementById('login-section');
-    const commentSection = document.getElementById('comment-section');
+    const postSection = document.getElementById('post-section');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
     const loginBtn = document.getElementById('login-btn');
-    const newCommentInput = document.getElementById('new-comment');
-    const addCommentBtn = document.getElementById('add-comment-btn');
-    const commentsContainer = document.getElementById('comments-container');
+    const newPostInput = document.getElementById('new-post');
+    const addPostBtn = document.getElementById('add-post-btn');
+    const postsContainer = document.getElementById('posts-container');
     const logoutBtn = document.getElementById('logout-btn');
-    const imageUpload = document.getElementById('image-upload');
+    const postImageUpload = document.getElementById('post-image-upload');
     const emojiPicker = document.getElementById('emoji-picker');
-    let uploadedImage = '';
+    let uploadedPostImage = '';
 
     // Check if user is already logged in
     const user = localStorage.getItem('user');
     if (user) {
-        showCommentSection();
+        showPostSection();
     }
 
     // Login function
@@ -26,137 +26,181 @@ document.addEventListener('DOMContentLoaded', () => {
         if (username && password) {
             // Save user info in localStorage
             localStorage.setItem('user', username);
-            showCommentSection();
+            showPostSection();
         }
     });
 
-    function showCommentSection() {
+    function showPostSection() {
         loginSection.style.display = 'none';
-        commentSection.style.display = 'block';
-        loadComments();
+        postSection.style.display = 'block';
+        loadPosts();
     }
 
     // Logout function
     logoutBtn.addEventListener('click', () => {
         localStorage.removeItem('user'); // Remove the user data
         loginSection.style.display = 'block'; // Show login section again
-        commentSection.style.display = 'none'; // Hide comment section
+        postSection.style.display = 'none'; // Hide post section
     });
 
-    // Add comment function
-    addCommentBtn.addEventListener('click', () => {
-        const newComment = newCommentInput.value.trim();
+    // Add post function
+    addPostBtn.addEventListener('click', () => {
+        const newPost = newPostInput.value.trim();
         
-        if (newComment || uploadedImage) { // Either comment or image should be provided
-            const comments = getComments();
-            const comment = {
-                text: newComment,
-                image: uploadedImage, // Store image in comment object
-                likes: 0,
-                dislikes: 0,
+        if (newPost || uploadedPostImage) { // Either post or image should be provided
+            const posts = getPosts();
+            const post = {
+                text: newPost,
+                image: uploadedPostImage, // Store image in post object
+                comments: [], // Initialize comments array
                 id: Date.now()
             };
-            comments.push(comment);
-            localStorage.setItem('comments', JSON.stringify(comments));
-            displayComments(comments);
-            newCommentInput.value = '';
-            imageUpload.value = ''; // Clear image input after posting
-            uploadedImage = ''; // Reset uploadedImage
-            commentsContainer.scrollIntoView({ behavior: 'smooth' });
+            posts.push(post);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            displayPosts(posts);
+            newPostInput.value = '';
+            postImageUpload.value = ''; // Clear image input after posting
+            uploadedPostImage = ''; // Reset uploadedPostImage
         }
     });
 
-    // Handle image upload and convert to Base64
-    imageUpload.addEventListener('change', (event) => {
+    // Handle image upload and convert to Base64 for posts
+    postImageUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                uploadedImage = e.target.result; // Base64 string of the image
+                uploadedPostImage = e.target.result; // Base64 string of the image
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Load comments from localStorage
-    function loadComments() {
-        const comments = getComments();
-        displayComments(comments);
+    // Load posts from localStorage
+    function loadPosts() {
+        const posts = getPosts();
+        displayPosts(posts);
     }
 
-    // Get comments from localStorage
-    function getComments() {
-        return JSON.parse(localStorage.getItem('comments')) || [];
+    // Get posts from localStorage
+    function getPosts() {
+        return JSON.parse(localStorage.getItem('posts')) || [];
     }
 
-    // Display comments in the UI
-    function displayComments(comments) {
+    // Display posts in the UI
+    function displayPosts(posts) {
+        postsContainer.innerHTML = '';
+        posts.forEach(post => {
+            const postBox = document.createElement('div');
+            postBox.className = 'post-box';
+            postBox.innerHTML = `
+                <p>${post.text}</p>
+                ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image" />` : ''}
+                <h4>Comments</h4>
+                <textarea class="comment-input" placeholder="Add a comment..."></textarea>
+                <button class="add-comment-btn" data-id="${post.id}">Comment</button>
+                <div class="comments-container" data-id="${post.id}"></div>
+            `;
+            postsContainer.appendChild(postBox);
+            attachCommentHandler(postBox, post.id);
+            displayComments(post.comments, post.id);
+        });
+    }
+
+    // Attach event handler for comment button
+    function attachCommentHandler(postBox, postId) {
+        const addCommentBtn = postBox.querySelector('.add-comment-btn');
+        const commentInput = postBox.querySelector('.comment-input');
+        const commentsContainer = postBox.querySelector('.comments-container');
+
+        addCommentBtn.addEventListener('click', () => {
+            const newComment = commentInput.value.trim();
+            if (newComment) {
+                const posts = getPosts();
+                const post = posts.find(p => p.id === postId);
+                const comment = {
+                    text: newComment,
+                    likes: 0,
+                    dislikes: 0,
+                    id: Date.now()
+                };
+                post.comments.push(comment);
+                localStorage.setItem('posts', JSON.stringify(posts));
+                displayComments(post.comments, postId);
+                commentInput.value = ''; // Clear the comment input
+            }
+        });
+    }
+
+    // Display comments for a specific post
+    function displayComments(comments, postId) {
+        const commentsContainer = document.querySelector(`.comments-container[data-id="${postId}"]`);
         commentsContainer.innerHTML = '';
         comments.forEach(comment => {
             const commentBox = document.createElement('div');
             commentBox.className = 'comment-box';
             commentBox.innerHTML = `
                 <p>${comment.text}</p>
-                ${comment.image ? `<img src="${comment.image}" alt="Comment image" class="comment-image" />` : ''}
                 <button class="like-dislike-btn like" data-id="${comment.id}">👍 ${comment.likes}</button>
                 <button class="like-dislike-btn dislike" data-id="${comment.id}">👎 ${comment.dislikes}</button>
             `;
             commentsContainer.appendChild(commentBox);
         });
-        attachLikeDislikeHandlers();
+        attachLikeDislikeHandlers(comments, postId);
     }
 
     // Attach event handlers for like/dislike buttons
-    function attachLikeDislikeHandlers() {
-        const likeButtons = document.querySelectorAll('.like-dislike-btn.like');
-        const dislikeButtons = document.querySelectorAll('.like-dislike-btn.dislike');
+    function attachLikeDislikeHandlers(comments, postId) {
+        const commentBoxes = document.querySelectorAll(`.comments-container[data-id="${postId}"] .comment-box`);
+        commentBoxes.forEach((commentBox, index) => {
+            const likeButton = commentBox.querySelector('.like');
+            const dislikeButton = commentBox.querySelector('.dislike');
 
-        likeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.getAttribute('data-id');
-                updateComment(id, 'like');
+            likeButton.addEventListener('click', () => {
+                updateComment(postId, comments[index].id, 'like');
             });
-        });
-
-        dislikeButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const id = button.getAttribute('data-id');
-                updateComment(id, 'dislike');
+            dislikeButton.addEventListener('click', () => {
+                updateComment(postId, comments[index].id, 'dislike');
             });
         });
     }
 
-    // Update likes/dislikes in localStorage
-    function updateComment(id, action) {
-        const comments = getComments();
-        const comment = comments.find(c => c.id === Number(id));
+    // Update likes/dislikes in localStorage for comments
+    function updateComment(postId, commentId, action) {
+        const posts = getPosts();
+        const post = posts.find(p => p.id === postId);
+        const comment = post.comments.find(c => c.id === commentId);
         if (action === 'like') {
             comment.likes += 1;
         } else if (action === 'dislike') {
             comment.dislikes += 1;
         }
-        localStorage.setItem('comments', JSON.stringify(comments));
-        displayComments(comments);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        displayComments(post.comments, postId);
     }
 
     // Emoji picker functionality
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('emoji')) {
             const emoji = event.target.getAttribute('data-emoji');
-            newCommentInput.value += emoji; // Append emoji to the comment input
+            const activeCommentInput = document.querySelector('.comment-input:focus');
+            if (activeCommentInput) {
+                activeCommentInput.value += emoji; // Append emoji to the comment input
+            }
         }
     });
 
     // Show/hide emoji picker
-    newCommentInput.addEventListener('focus', () => {
-        emojiPicker.style.display = 'flex'; // Show emoji picker on focus
-    });
-
-    newCommentInput.addEventListener('blur', () => {
-        emojiPicker.style.display = 'none'; // Hide emoji picker when input loses focus
+    const commentInputs = document.querySelectorAll('.comment-input');
+    commentInputs.forEach(input => {
+        input.addEventListener('focus', () => {
+            emojiPicker.style.display = 'flex'; // Show emoji picker on focus
+        });
+        input.addEventListener('blur', () => {
+            emojiPicker.style.display = 'none'; // Hide emoji picker when input loses focus
+        });
     });
 });
-
 
 
 
