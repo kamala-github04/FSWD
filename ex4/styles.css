@@ -1,0 +1,128 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    text-align: center;
+    color: #343a40;
+  }
+  
+  .restaurant-section {
+    margin: 20px 0;
+    text-align: center;
+  }
+  
+  label {
+    font-size: 1.2rem;
+    color: #495057;
+  }
+  
+  select {
+    padding: 10px;
+    margin-left: 10px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+  }
+  
+  .menu-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f1f3f5;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .menu-item:hover {
+    transform: translateY(-5px);
+  }
+  
+  .menu-item h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #495057;
+  }
+  
+  .menu-item button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .menu-item button:hover {
+    background-color: #218838;
+  }
+  
+  #order-summary {
+    margin-top: 30px;
+    padding: 15px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  #order-summary h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #495057;
+  }
+  
+  #confirm-order {
+    display: block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 5px;
+    margin: 20px auto 0;
+    cursor: pointer;
+  }
+  
+  #confirm-order:hover {
+    background-color: #0056b3;
+  }
+  
+  #order-list {
+    padding: 10px;
+    font-size: 1rem;
+  }
+  
+  p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #495057;
+  }
+  
+  #total-amount {
+    font-weight: bold;
+    color: #007bff;
+  }
+  
