@@ -8,25 +8,28 @@
 </head>
 <body>
   <div class="container">
-    <h1>Restaurant Menu</h1>
+    <h1>Order from Your Favorite Restaurant</h1>
     
-    <div class="menu-item">
-      <h2>Pizza</h2>
-      <button onclick="addToOrder('Pizza', 10)">Order for $10</button>
+    <div class="restaurant-section">
+      <label for="restaurant-select">Select a Restaurant:</label>
+      <select id="restaurant-select" onchange="showMenu()">
+        <option value="">-- Select a Restaurant --</option>
+        <option value="italianBistro">Italian Bistro</option>
+        <option value="sushiHouse">Sushi House</option>
+        <option value="tacoPalace">Taco Palace</option>
+      </select>
     </div>
-    <div class="menu-item">
-      <h2>Burger</h2>
-      <button onclick="addToOrder('Burger', 8)">Order for $8</button>
+
+    <div id="menu-section">
+      <h1>Menu</h1>
+      <div id="menu-items" class="menu-items-container"></div>
     </div>
-    <div class="menu-item">
-      <h2>Pasta</h2>
-      <button onclick="addToOrder('Pasta', 12)">Order for $12</button>
-    </div>
-    
+
     <div id="order-summary">
       <h2>Your Order</h2>
       <div id="order-list"></div>
       <p>Total: $<span id="total-amount">0</span></p>
+      <button id="confirm-order" onclick="confirmOrder()">Order Now</button>
     </div>
   </div>
 
