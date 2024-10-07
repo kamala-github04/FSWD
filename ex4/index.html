@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Delivery Website</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Restaurant Menu</h1>
+    
+    <div class="menu-item">
+      <h2>Pizza</h2>
+      <button onclick="addToOrder('Pizza', 10)">Order for $10</button>
+    </div>
+    <div class="menu-item">
+      <h2>Burger</h2>
+      <button onclick="addToOrder('Burger', 8)">Order for $8</button>
+    </div>
+    <div class="menu-item">
+      <h2>Pasta</h2>
+      <button onclick="addToOrder('Pasta', 12)">Order for $12</button>
+    </div>
+    
+    <div id="order-summary">
+      <h2>Your Order</h2>
+      <div id="order-list"></div>
+      <p>Total: $<span id="total-amount">0</span></p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
