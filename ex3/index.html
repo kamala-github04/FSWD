@@ -3,28 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microblogging App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <title>Microblogging App</title>
 </head>
 <body>
-    <div class="container" id="login-section">
-        <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username" />
-        <input type="password" id="password" placeholder="Password" />
-        <button id="login-btn">Login</button>
-    </div>
-
-    <div class="container" id="post-section" style="display: none;">
-        <h3>Posts</h3>
-        <button id="logout-btn">Logout</button>
+    <div class="container">
+        <h1>Microblogging App <span role="img" aria-label="Microblogging">📝</span></h1>
         
-        <div id="posts-container"></div>
+        <div class="user-info">
+            <p id="follower-count">Followers: 0</p>
+            <button id="follow-btn">Follow</button>
+        </div>
 
-        <h4>Add a New Post</h4>
-        <textarea id="new-post" placeholder="What's on your mind?"></textarea>
-        <input type="file" id="post-image-upload" accept="image/*">
-        <button id="add-post-btn">Post</button>
+        <textarea id="new-post-input" rows="3" placeholder="What's on your mind?"></textarea>
+        <input type="file" id="image-upload" accept="image/*">
+        <button id="add-post-btn">Add Post</button>
+
+        <div id="posts-container"></div>
+        <div class="footer">Made with ❤️ by YourName</div>
     </div>
 
     <script src="script.js"></script>
