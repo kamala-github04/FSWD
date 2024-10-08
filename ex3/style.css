@@ -107,9 +107,22 @@ button:hover {
     margin: 0 5px; /* Space between emojis */
 }
 
+.follower-box {
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space between items */
+    align-items: center; /* Center items vertically */
+    margin-bottom: 10px; /* Space between followers */
+}
+
 .unfollow-btn {
     background-color: #dc3545; /* Red */
     color: white;
-    margin-top: 5px;
+    border: none;
+    padding: 2px 4px; /* Reduced padding */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px; /* Reduced font size */
+    width: 60px; /* Fixed width */
+    text-align: center; /* Center text */
 }
 
