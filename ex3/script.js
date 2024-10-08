@@ -9,10 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const postsContainer = document.getElementById('posts-container');
     const logoutBtn = document.getElementById('logout-btn');
     const postImageUpload = document.getElementById('post-image-upload');
-    const emojiPicker = document.getElementById('emoji-picker');
     const followersContainer = document.getElementById('followers-container');
     let uploadedPostImage = '';
-    let followers = []; 
+    let followers = JSON.parse(localStorage.getItem('followers')) || []; 
 
     // Check if user is already logged in
     const user = localStorage.getItem('user');
@@ -26,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (username && password) {
-            // Save user info in localStorage
             localStorage.setItem('user', username);
             showPostSection();
         }
@@ -41,16 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Logout function
     logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('user'); // Remove the user data
-        loginSection.style.display = 'block'; // Show login section again
-        postSection.style.display = 'none'; // Hide post section
+        localStorage.removeItem('user');
+        loginSection.style.display = 'block';
+        postSection.style.display = 'none';
     });
 
     // Add post function
     addPostBtn.addEventListener('click', () => {
         const newPost = newPostInput.value.trim();
         
-        if (newPost || uploadedPostImage) { // Either post or image should be provided
+        if (newPost || uploadedPostImage) {
             const posts = getPosts();
             const post = {
                 text: newPost,
@@ -67,19 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle image upload and convert to Base64 for posts
+    // Handle image upload
     postImageUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                uploadedPostImage = e.target.result; // Base64 string of the image
+                uploadedPostImage = e.target.result; 
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Load posts from localStorage
+    // Load posts
     function loadPosts() {
         const posts = getPosts();
         displayPosts(posts);
@@ -90,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return JSON.parse(localStorage.getItem('posts')) || [];
     }
 
-    // Display posts in the UI
+    // Display posts
     function displayPosts(posts) {
         postsContainer.innerHTML = '';
         posts.forEach(post => {
@@ -132,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 post.comments.push(comment);
                 localStorage.setItem('posts', JSON.stringify(posts));
                 displayComments(post.comments, postId);
-                commentInput.value = ''; // Clear the comment input
+                commentInput.value = '';
             }
         });
     }
@@ -142,9 +140,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const deletePostBtn = postBox.querySelector('.delete-post-btn');
         deletePostBtn.addEventListener('click', () => {
             let posts = getPosts();
-            posts = posts.filter(p => p.id !== postId); // Remove post
+            posts = posts.filter(p => p.id !== postId);
             localStorage.setItem('posts', JSON.stringify(posts));
-            loadPosts(); // Reload posts
+            loadPosts();
         });
     }
 
@@ -164,62 +162,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-   // Followers functionality
-
-
-function displayFollowers() {
-    followersContainer.innerHTML = '';
-    followers.forEach(follower => {
-        const followerBox = document.createElement('div');
-        followerBox.className = 'follower-box'; // Added class here
-        followerBox.innerHTML = `
-            <span>${follower}</span>
-            <button class="unfollow-btn" data-follower="${follower}">Unfollow</button>
-        `;
-        followersContainer.appendChild(followerBox);
-    });
-}
-
-// Follow button functionality
-document.getElementById('follow-btn').addEventListener('click', () => {
-    const username = prompt("Enter the username to follow:");
-    if (username && !followers.includes(username)) {
-        followers.push(username);
-        displayFollowers();
+    // Followers functionality
+    function displayFollowers() {
+        followersContainer.innerHTML = '';
+        followers.forEach(follower => {
+            const followerBox = document.createElement('div');
+            followerBox.className = 'follower-box';
+            followerBox.innerHTML = `
+                <span>${follower}</span>
+                <button class="unfollow-btn" data-follower="${follower}">Unfollow</button>
+            `;
+            followersContainer.appendChild(followerBox);
+        });
     }
-});
 
-// Unfollow button functionality
-followersContainer.addEventListener('click', (event) => {
-    if (event.target.classList.contains('unfollow-btn')) {
-        const followerToRemove = event.target.getAttribute('data-follower');
-        followers = followers.filter(follower => follower !== followerToRemove);
-        displayFollowers();
-    }
-});
-
-
-    // Emoji picker functionality
-    document.addEventListener('click', (event) => {
-        if (event.target.classList.contains('emoji')) {
-            const emoji = event.target.getAttribute('data-emoji');
-            const activeCommentInput = document.querySelector('.comment-input:focus');
-            if (activeCommentInput) {
-                activeCommentInput.value += emoji; // Append emoji to the comment input
-            }
+    // Follow button functionality
+    document.getElementById('follow-btn').addEventListener('click', () => {
+        const username = prompt("Enter the username to follow:");
+        if (username && !followers.includes(username)) {
+            followers.push(username);
+            localStorage.setItem('followers', JSON.stringify(followers)); // Save followers to localStorage
+            displayFollowers();
         }
     });
 
-    // Show/hide emoji picker
-    document.querySelectorAll('.comment-input').forEach(input => {
-        input.addEventListener('focus', () => {
-            emojiPicker.style.display = 'flex'; // Show emoji picker when the input is focused
-        });
-        input.addEventListener('blur', () => {
-            setTimeout(() => {
-                emojiPicker.style.display = 'none'; // Hide emoji picker when focus is lost
-            }, 200); // Delay to allow emoji click
-        });
+    // Unfollow button functionality
+    followersContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('unfollow-btn')) {
+            const followerToRemove = event.target.getAttribute('data-follower');
+            followers = followers.filter(follower => follower !== followerToRemove);
+            localStorage.setItem('followers', JSON.stringify(followers)); // Update followers in localStorage
+            displayFollowers();
+        }
+    });
+
+    // Like and Dislike functionality for comments
+    postsContainer.addEventListener('click', (event) => {
+        const posts = getPosts();
+        const postId = event.target.closest('.post-box').querySelector('.add-comment-btn').getAttribute('data-id');
+
+        if (event.target.classList.contains('like-dislike-btn')) {
+            const commentId = event.target.getAttribute('data-id');
+            const post = posts.find(p => p.id == postId);
+            const comment = post.comments.find(c => c.id == commentId);
+
+            if (event.target.classList.contains('like')) {
+                comment.likes++;
+            } else if (event.target.classList.contains('dislike')) {
+                comment.dislikes++;
+            }
+
+            localStorage.setItem('posts', JSON.stringify(posts)); // Update localStorage
+            displayPosts(posts); // Refresh display
+        }
     });
 });
 
