@@ -4,29 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microblogging App</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container" id="login-section">
+    <div id="login-section" class="container">
         <h2>Login</h2>
-        <input type="text" id="username" placeholder="Username" />
-        <input type="password" id="password" placeholder="Password" />
-        <button id="login-btn" class="primary-btn">Login</button>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="login-btn">Login</button>
     </div>
 
-    <div class="container" id="post-section" style="display: none;">
-        <h3>Posts</h3>
-        <button id="logout-btn" class="secondary-btn">Logout</button>
-        
-        <div id="posts-container"></div>
-
-        <h4>Add a New Post</h4>
-        <textarea id="new-post" placeholder="What's on your mind?"></textarea>
+    <div id="post-section" class="container" style="display:none;">
+        <h2>Create a Post</h2>
+        <textarea id="new-post" placeholder="What's on your mind..."></textarea>
         <input type="file" id="post-image-upload" accept="image/*">
-        <button id="add-post-btn" class="success-btn">Post</button>
+        <button id="add-post-btn">Add Post</button>
+        <button id="logout-btn">Logout</button>
+
+        <h3>Followers</h3>
+        <div id="followers-list"></div>
+        <input type="text" id="follower-name" placeholder="Follower's Name">
+        <button id="follow-btn">Follow</button>
+
+        <h3>Posts</h3>
+        <div id="posts-container"></div>
     </div>
+
+   
 
     <script src="script.js"></script>
 </body>
 </html>
+
