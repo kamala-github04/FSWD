@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emojiPicker = document.getElementById('emoji-picker');
     const followersContainer = document.getElementById('followers-container');
     let uploadedPostImage = '';
-    let followers = [];
+    let followers = []; 
 
     // Check if user is already logged in
     const user = localStorage.getItem('user');
