@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     const postImageUpload = document.getElementById('post-image-upload');
     const emojiPicker = document.getElementById('emoji-picker');
-    const followersList = document.getElementById('followers-list');
-    const followBtn = document.getElementById('follow-btn');
-    const followerNameInput = document.getElementById('follower-name');
+    const followersContainer = document.getElementById('followers-container');
     let uploadedPostImage = '';
     let followers = [];
 
@@ -28,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (username && password) {
+            // Save user info in localStorage
             localStorage.setItem('user', username);
             showPostSection();
         }
@@ -37,21 +36,21 @@ document.addEventListener('DOMContentLoaded', () => {
         loginSection.style.display = 'none';
         postSection.style.display = 'block';
         loadPosts();
-        loadFollowers();
+        displayFollowers();
     }
 
     // Logout function
     logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('user');
-        loginSection.style.display = 'block';
-        postSection.style.display = 'none';
+        localStorage.removeItem('user'); // Remove the user data
+        loginSection.style.display = 'block'; // Show login section again
+        postSection.style.display = 'none'; // Hide post section
     });
 
     // Add post function
     addPostBtn.addEventListener('click', () => {
         const newPost = newPostInput.value.trim();
         
-        if (newPost || uploadedPostImage) {
+        if (newPost || uploadedPostImage) { // Either post or image should be provided
             const posts = getPosts();
             const post = {
                 text: newPost,
@@ -68,28 +67,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Handle image upload
+    // Handle image upload and convert to Base64 for posts
     postImageUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                uploadedPostImage = e.target.result;
+                uploadedPostImage = e.target.result; // Base64 string of the image
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Load posts
+    // Load posts from localStorage
     function loadPosts() {
         const posts = getPosts();
         displayPosts(posts);
     }
 
+    // Get posts from localStorage
     function getPosts() {
         return JSON.parse(localStorage.getItem('posts')) || [];
     }
 
+    // Display posts in the UI
     function displayPosts(posts) {
         postsContainer.innerHTML = '';
         posts.forEach(post => {
@@ -98,28 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
             postBox.innerHTML = `
                 <p>${post.text}</p>
                 ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image" />` : ''}
-                <button class="delete-post-btn" data-id="${post.id}">Delete Post</button>
                 <h4>Comments</h4>
                 <textarea class="comment-input" placeholder="Add a comment..."></textarea>
                 <button class="add-comment-btn" data-id="${post.id}">Comment</button>
                 <div class="comments-container" data-id="${post.id}"></div>
+                <button class="delete-post-btn" data-id="${post.id}">Delete Post</button>
             `;
             postsContainer.appendChild(postBox);
             attachCommentHandler(postBox, post.id);
-            attachDeleteHandler(postBox, post.id);
             displayComments(post.comments, post.id);
+            attachDeletePostHandler(postBox, post.id);
         });
     }
 
-    function attachDeleteHandler(postBox, postId) {
-        const deletePostBtn = postBox.querySelector('.delete-post-btn');
-        deletePostBtn.addEventListener('click', () => {
-            const posts = getPosts().filter(post => post.id !== postId);
-            localStorage.setItem('posts', JSON.stringify(posts));
-            displayPosts(posts);
-        });
-    }
-
+    // Attach event handler for comment button
     function attachCommentHandler(postBox, postId) {
         const addCommentBtn = postBox.querySelector('.add-comment-btn');
         const commentInput = postBox.querySelector('.comment-input');
@@ -139,11 +132,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 post.comments.push(comment);
                 localStorage.setItem('posts', JSON.stringify(posts));
                 displayComments(post.comments, postId);
-                commentInput.value = '';
+                commentInput.value = ''; // Clear the comment input
             }
         });
     }
 
+    // Attach event handler for delete post button
+    function attachDeletePostHandler(postBox, postId) {
+        const deletePostBtn = postBox.querySelector('.delete-post-btn');
+        deletePostBtn.addEventListener('click', () => {
+            let posts = getPosts();
+            posts = posts.filter(p => p.id !== postId); // Remove post
+            localStorage.setItem('posts', JSON.stringify(posts));
+            loadPosts(); // Reload posts
+        });
+    }
+
+    // Display comments for a specific post
     function displayComments(comments, postId) {
         const commentsContainer = document.querySelector(`.comments-container[data-id="${postId}"]`);
         commentsContainer.innerHTML = '';
@@ -157,76 +162,42 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             commentsContainer.appendChild(commentBox);
         });
-        attachLikeDislikeHandlers(comments, postId);
     }
 
-    function attachLikeDislikeHandlers(comments, postId) {
-        const commentBoxes = document.querySelectorAll(`.comments-container[data-id="${postId}"] .comment-box`);
-        commentBoxes.forEach((commentBox, index) => {
-            const likeButton = commentBox.querySelector('.like');
-            const dislikeButton = commentBox.querySelector('.dislike');
+   // Followers functionality
 
-            likeButton.addEventListener('click', () => {
-                updateComment(postId, comments[index].id, 'like');
-            });
-            dislikeButton.addEventListener('click', () => {
-                updateComment(postId, comments[index].id, 'dislike');
-            });
-        });
-    }
 
-    function updateComment(postId, commentId, action) {
-        const posts = getPosts();
-        const post = posts.find(p => p.id === postId);
-        const comment = post.comments.find(c => c.id === commentId);
-        if (action === 'like') {
-            comment.likes += 1;
-        } else if (action === 'dislike') {
-            comment.dislikes += 1;
-        }
-        localStorage.setItem('posts', JSON.stringify(posts));
-        displayComments(post.comments, postId);
-    }
-
-    // Followers functionality
-    followBtn.addEventListener('click', () => {
-        const followerName = followerNameInput.value.trim();
-        if (followerName && !followers.includes(followerName)) {
-            followers.push(followerName);
-            localStorage.setItem('followers', JSON.stringify(followers));
-            followerNameInput.value = '';
-            loadFollowers();
-        }
+function displayFollowers() {
+    followersContainer.innerHTML = '';
+    followers.forEach(follower => {
+        const followerBox = document.createElement('div');
+        followerBox.className = 'follower-box'; // Added class here
+        followerBox.innerHTML = `
+            <span>${follower}</span>
+            <button class="unfollow-btn" data-follower="${follower}">Unfollow</button>
+        `;
+        followersContainer.appendChild(followerBox);
     });
+}
 
-    function loadFollowers() {
-        followersList.innerHTML = '';
-        const savedFollowers = JSON.parse(localStorage.getItem('followers')) || [];
-        followers = savedFollowers;
-        savedFollowers.forEach(follower => {
-            const followerItem = document.createElement('div');
-            followerItem.textContent = follower;
-            const unfollowBtn = document.createElement('button');
-            unfollowBtn.className = 'unfollow-btn';
-            unfollowBtn.textContent = 'Unfollow';
-            unfollowBtn.addEventListener('click', () => {
-                unfollow(follower);
-            });
-            followerItem.appendChild(unfollowBtn);
-            followersList.appendChild(followerItem);
-        });
+// Follow button functionality
+document.getElementById('follow-btn').addEventListener('click', () => {
+    const username = prompt("Enter the username to follow:");
+    if (username && !followers.includes(username)) {
+        followers.push(username);
+        displayFollowers();
     }
+});
 
-    function unfollow(followerName) {
-        followers = followers.filter(follower => follower !== followerName);
-        localStorage.setItem('followers', JSON.stringify(followers));
-        loadFollowers();
+// Unfollow button functionality
+followersContainer.addEventListener('click', (event) => {
+    if (event.target.classList.contains('unfollow-btn')) {
+        const followerToRemove = event.target.getAttribute('data-follower');
+        followers = followers.filter(follower => follower !== followerToRemove);
+        displayFollowers();
     }
+});
 
-    // Load followers on login
-    if (user) {
-        loadFollowers();
-    }
 
     // Emoji picker functionality
     document.addEventListener('click', (event) => {
@@ -234,7 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const emoji = event.target.getAttribute('data-emoji');
             const activeCommentInput = document.querySelector('.comment-input:focus');
             if (activeCommentInput) {
-                activeCommentInput.value += emoji;
+                activeCommentInput.value += emoji; // Append emoji to the comment input
             }
         }
     });
@@ -242,13 +213,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show/hide emoji picker
     document.querySelectorAll('.comment-input').forEach(input => {
         input.addEventListener('focus', () => {
-            emojiPicker.style.display = 'flex';
+            emojiPicker.style.display = 'flex'; // Show emoji picker when the input is focused
         });
         input.addEventListener('blur', () => {
             setTimeout(() => {
-                emojiPicker.style.display = 'none';
-            }, 200);
+                emojiPicker.style.display = 'none'; // Hide emoji picker when focus is lost
+            }, 200); // Delay to allow emoji click
         });
     });
 });
-
