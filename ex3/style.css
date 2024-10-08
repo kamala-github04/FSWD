@@ -1,4 +1,3 @@
-
 * {
     margin: 0;
     padding: 0;
@@ -22,12 +21,7 @@ body {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
     padding: 30px;
     width: 400px;
-    transition: transform 0.2s;
     text-align: center;
-}
-
-.container:hover {
-    transform: translateY(-5px);
 }
 
 h2, h3 {
@@ -42,16 +36,8 @@ input, textarea {
     border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 16px;
-    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-input:focus, textarea:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none;
-}
-
-/* Base button styles */
 button {
     display: block;
     width: calc(100% - 20px);
@@ -64,64 +50,18 @@ button {
     transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Primary button */
-.primary-btn {
+#add-post-btn {
     background-color: #007bff; /* Blue */
     color: white;
 }
 
-.primary-btn:hover {
-    background-color: #0056b3; /* Darker blue */
-}
-
-/* Secondary button */
-.secondary-btn {
-    background-color: #6c757d; /* Gray */
-    color: white;
-}
-
-.secondary-btn:hover {
-    background-color: #5a6268; /* Darker gray */
-}
-
-/* Success button */
-.success-btn {
+#follow-btn {
     background-color: #28a745; /* Green */
     color: white;
 }
 
-.success-btn:hover {
-    background-color: #218838; /* Darker green */
-}
-
-/* Danger button */
-.danger-btn {
-    background-color: #dc3545; /* Red */
-    color: white;
-}
-
-.danger-btn:hover {
-    background-color: #c82333; /* Darker red */
-}
-
-/* Info button */
-.info-btn {
-    background-color: #17a2b8; /* Cyan */
-    color: white;
-}
-
-.info-btn:hover {
-    background-color: #138496; /* Darker cyan */
-}
-
-/* Warning button */
-.warning-btn {
-    background-color: #ffc107; /* Yellow */
-    color: black;
-}
-
-.warning-btn:hover {
-    background-color: #e0a800; /* Darker yellow */
+button:hover {
+    transform: scale(1.05);
 }
 
 #posts-container {
@@ -137,12 +77,10 @@ button {
     padding: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: relative;
-    transition: all 0.3s ease;
 }
 
 .post-box:hover {
     background-color: #f1f3f5;
-    transform: scale(1.02);
 }
 
 .comment-box {
@@ -152,17 +90,10 @@ button {
     padding: 10px;
 }
 
-.comment-image {
-    max-width: 100%;
-    border-radius: 10px;
-    margin-top: 10px;
-}
-
 .footer {
     text-align: center;
     color: #666;
     font-size: 14px;
-    margin-top: 20px;
 }
 
 #emoji-picker {
@@ -174,5 +105,11 @@ button {
     cursor: pointer;
     font-size: 24px; /* Size of the emojis */
     margin: 0 5px; /* Space between emojis */
+}
+
+.unfollow-btn {
+    background-color: #dc3545; /* Red */
+    color: white;
+    margin-top: 5px;
 }
 
