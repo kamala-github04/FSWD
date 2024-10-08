@@ -1,135 +1,128 @@
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-  background: linear-gradient(135deg, #f0f4f8, #e4e7eb);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f0f4f8, #e4e7eb);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .container {
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-  padding: 30px;
-  width: 400px;
-  transition: transform 0.2s;
-  text-align: center;
-  animation: fadeIn 0.5s ease-in-out;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 400px;
+    transition: transform 0.2s;
+    text-align: center;
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 @keyframes fadeIn {
-  from {
-      opacity: 0;
-  }
-  to {
-      opacity: 1;
-  }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 h1 {
-  margin-bottom: 20px;
-  color: #333;
-  font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
 }
 
-input, textarea {
-  width: calc(100% - 20px);
-  padding: 15px;
-  margin: 10px 0;
-  border: 2px solid #007bff;
-  border-radius: 10px;
-  font-size: 16px;
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-input:focus, textarea:focus {
-  border-color: #0056b3;
-  box-shadow: 0 0 5px rgba(0, 86, 179, 0.5);
-  outline: none;
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 button {
-  display: block;
-  width: calc(100% - 20px);
-  padding: 15px;
-  margin: 10px 0;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s, transform 0.2s;
-  background-color: #007bff;
-  color: white;
+    display: block;
+    width: calc(100% - 20px);
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s;
+    background-color: #007bff;
+    color: white;
 }
 
 button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+#follow-btn {
+    width: auto;
+    background-color: #28a745;
+    margin: 0 5px;
+}
+
+#follow-btn.unfollow {
+    background-color: #dc3545;
 }
 
 #posts-container {
-  margin-top: 20px;
-  display: flex;
-  flex-direction: column;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .post-box {
-  background-color: #e9ecef;
-  border-radius: 10px;
-  margin-bottom: 15px;
-  padding: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
-  transition: all 0.3s ease;
+    background-color: #e9ecef;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    transition: all 0.3s ease;
 }
 
 .post-box:hover {
-  background-color: #dfe4ea;
-  transform: scale(1.02);
+    background-color: #dfe4ea;
+    transform: scale(1.02);
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+button.delete-post {
+    background-color: #dc3545;
 }
 
 .comment-box {
-  background-color: #f1f3f5;
-  border-radius: 10px;
-  margin-top: 10px;
-  padding: 10px;
-  transition: background-color 0.3s ease;
-}
-
-.comment-box:hover {
-  background-color: #e4e7eb;
+    background-color: #f1f3f5;
+    border-radius: 10px;
+    margin-top: 10px;
+    padding: 10px;
 }
 
 .comment-image {
-  max-width: 100%;
-  border-radius: 10px;
-  margin-top: 10px;
+    max-width: 100%;
+    border-radius: 10px;
+    margin-top: 10px;
 }
 
 .footer {
-  text-align: center;
-  color: #666;
-  font-size: 14px;
-  margin-top: 20px;
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 20px;
 }
-
-#emoji-picker {
-  display: flex;
-  margin-bottom: 10px; /* Add space below the emoji picker */
-}
-
-.emoji {
-  cursor: pointer;
-  font-size: 24px; /* Size of the emojis */
-  margin: 0 5px; /* Space between emojis */
-}
-
-
