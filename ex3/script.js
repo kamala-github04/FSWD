@@ -10,7 +10,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoutBtn = document.getElementById('logout-btn');
     const postImageUpload = document.getElementById('post-image-upload');
     const emojiPicker = document.getElementById('emoji-picker');
+    const followersList = document.getElementById('followers-list');
+    const followBtn = document.getElementById('follow-btn');
+    const followerNameInput = document.getElementById('follower-name');
     let uploadedPostImage = '';
+    let followers = [];
 
     // Check if user is already logged in
     const user = localStorage.getItem('user');
@@ -24,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (username && password) {
-            // Save user info in localStorage
             localStorage.setItem('user', username);
             showPostSection();
         }
@@ -34,60 +37,59 @@ document.addEventListener('DOMContentLoaded', () => {
         loginSection.style.display = 'none';
         postSection.style.display = 'block';
         loadPosts();
+        loadFollowers();
     }
 
     // Logout function
     logoutBtn.addEventListener('click', () => {
-        localStorage.removeItem('user'); // Remove the user data
-        loginSection.style.display = 'block'; // Show login section again
-        postSection.style.display = 'none'; // Hide post section
+        localStorage.removeItem('user');
+        loginSection.style.display = 'block';
+        postSection.style.display = 'none';
     });
 
     // Add post function
     addPostBtn.addEventListener('click', () => {
         const newPost = newPostInput.value.trim();
         
-        if (newPost || uploadedPostImage) { // Either post or image should be provided
+        if (newPost || uploadedPostImage) {
             const posts = getPosts();
             const post = {
                 text: newPost,
-                image: uploadedPostImage, // Store image in post object
-                comments: [], // Initialize comments array
+                image: uploadedPostImage,
+                comments: [],
                 id: Date.now()
             };
             posts.push(post);
             localStorage.setItem('posts', JSON.stringify(posts));
             displayPosts(posts);
             newPostInput.value = '';
-            postImageUpload.value = ''; // Clear image input after posting
-            uploadedPostImage = ''; // Reset uploadedPostImage
+            postImageUpload.value = '';
+            uploadedPostImage = '';
         }
     });
 
-    // Handle image upload and convert to Base64 for posts
+    // Handle image upload
     postImageUpload.addEventListener('change', (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                uploadedPostImage = e.target.result; // Base64 string of the image
+                uploadedPostImage = e.target.result;
             };
             reader.readAsDataURL(file);
         }
     });
 
-    // Load posts from localStorage
+    // Load posts
     function loadPosts() {
         const posts = getPosts();
         displayPosts(posts);
     }
 
-    // Get posts from localStorage
     function getPosts() {
         return JSON.parse(localStorage.getItem('posts')) || [];
     }
 
-    // Display posts in the UI
     function displayPosts(posts) {
         postsContainer.innerHTML = '';
         posts.forEach(post => {
@@ -96,6 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postBox.innerHTML = `
                 <p>${post.text}</p>
                 ${post.image ? `<img src="${post.image}" alt="Post image" class="post-image" />` : ''}
+                <button class="delete-post-btn" data-id="${post.id}">Delete Post</button>
                 <h4>Comments</h4>
                 <textarea class="comment-input" placeholder="Add a comment..."></textarea>
                 <button class="add-comment-btn" data-id="${post.id}">Comment</button>
@@ -103,11 +106,20 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
             postsContainer.appendChild(postBox);
             attachCommentHandler(postBox, post.id);
+            attachDeleteHandler(postBox, post.id);
             displayComments(post.comments, post.id);
         });
     }
 
-    // Attach event handler for comment button
+    function attachDeleteHandler(postBox, postId) {
+        const deletePostBtn = postBox.querySelector('.delete-post-btn');
+        deletePostBtn.addEventListener('click', () => {
+            const posts = getPosts().filter(post => post.id !== postId);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            displayPosts(posts);
+        });
+    }
+
     function attachCommentHandler(postBox, postId) {
         const addCommentBtn = postBox.querySelector('.add-comment-btn');
         const commentInput = postBox.querySelector('.comment-input');
@@ -127,12 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 post.comments.push(comment);
                 localStorage.setItem('posts', JSON.stringify(posts));
                 displayComments(post.comments, postId);
-                commentInput.value = ''; // Clear the comment input
+                commentInput.value = '';
             }
         });
     }
 
-    // Display comments for a specific post
     function displayComments(comments, postId) {
         const commentsContainer = document.querySelector(`.comments-container[data-id="${postId}"]`);
         commentsContainer.innerHTML = '';
@@ -149,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
         attachLikeDislikeHandlers(comments, postId);
     }
 
-    // Attach event handlers for like/dislike buttons
     function attachLikeDislikeHandlers(comments, postId) {
         const commentBoxes = document.querySelectorAll(`.comments-container[data-id="${postId}"] .comment-box`);
         commentBoxes.forEach((commentBox, index) => {
@@ -165,7 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Update likes/dislikes in localStorage for comments
     function updateComment(postId, commentId, action) {
         const posts = getPosts();
         const post = posts.find(p => p.id === postId);
@@ -179,13 +188,53 @@ document.addEventListener('DOMContentLoaded', () => {
         displayComments(post.comments, postId);
     }
 
+    // Followers functionality
+    followBtn.addEventListener('click', () => {
+        const followerName = followerNameInput.value.trim();
+        if (followerName && !followers.includes(followerName)) {
+            followers.push(followerName);
+            localStorage.setItem('followers', JSON.stringify(followers));
+            followerNameInput.value = '';
+            loadFollowers();
+        }
+    });
+
+    function loadFollowers() {
+        followersList.innerHTML = '';
+        const savedFollowers = JSON.parse(localStorage.getItem('followers')) || [];
+        followers = savedFollowers;
+        savedFollowers.forEach(follower => {
+            const followerItem = document.createElement('div');
+            followerItem.textContent = follower;
+            const unfollowBtn = document.createElement('button');
+            unfollowBtn.className = 'unfollow-btn';
+            unfollowBtn.textContent = 'Unfollow';
+            unfollowBtn.addEventListener('click', () => {
+                unfollow(follower);
+            });
+            followerItem.appendChild(unfollowBtn);
+            followersList.appendChild(followerItem);
+        });
+    }
+
+    function unfollow(followerName) {
+        followers = followers.filter(follower => follower !== followerName);
+        localStorage.setItem('followers', JSON.stringify(followers));
+        loadFollowers();
+    }
+
+    // Load followers on login
+    if (user) {
+        loadFollowers();
+    }
+
     // Emoji picker functionality
     document.addEventListener('click', (event) => {
         if (event.target.classList.contains('emoji')) {
             const emoji = event.target.getAttribute('data-emoji');
             const activeCommentInput = document.querySelector('.comment-input:focus');
             if (activeCommentInput) {
-                activeCommentInput.value += emoji; // Append emoji to the comment input
+                activeCommentInput.value += emoji;
             }
         }
     });
@@ -193,12 +242,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show/hide emoji picker
     document.querySelectorAll('.comment-input').forEach(input => {
         input.addEventListener('focus', () => {
-            emojiPicker.style.display = 'flex'; // Show emoji picker when the input is focused
+            emojiPicker.style.display = 'flex';
         });
         input.addEventListener('blur', () => {
             setTimeout(() => {
-                emojiPicker.style.display = 'none'; // Hide emoji picker when focus is lost
-            }, 200); // Delay to allow emoji click
+                emojiPicker.style.display = 'none';
+            }, 200);
         });
     });
 });
