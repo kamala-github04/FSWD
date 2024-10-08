@@ -222,3 +222,4 @@ followersContainer.addEventListener('click', (event) => {
         });
     });
 });
+
