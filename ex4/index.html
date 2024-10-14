@@ -7,16 +7,23 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
+  <div id="login-section" class="container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button id="login-btn">Login</button>
+    <p id="login-message" style="color: red; text-align: center;"></p>
+  </div>
+
+  <div id="restaurant-section" class="container" style="display:none;">
     <h1>Order from Your Favorite Restaurant</h1>
-    
     <div class="restaurant-section">
       <label for="restaurant-select">Select a Restaurant:</label>
       <select id="restaurant-select" onchange="showMenu()">
         <option value="">-- Select a Restaurant --</option>
-        <option value="italianBistro">Italian Bistro</option> 
-        <option value="sushiHouse">Sushi House</option>
-        <option value="tacoPalace">Taco Palace</option>
+        <option value="northIndianDhaba">North Indian Dhaba</option>
+        <option value="southIndianCafe">South Indian Café</option>
+        <option value="streetFoodBazaar">Street Food Bazaar</option>
       </select>
     </div>
 
@@ -28,12 +35,65 @@
     <div id="order-summary">
       <h2>Your Order</h2>
       <div id="order-list"></div>
-      <p>Total: $<span id="total-amount">0</span></p>
-      <button id="confirm-order" onclick="confirmOrder()">Order Now</button>
+      <p>Total: Rs.<span id="total-amount">0</span></p>
+      <button id="confirm-order" onclick="openAddressPopup()">Order Now</button>
+    </div>
+  </div>
+
+  <!-- Address Popup for customer details -->
+  <div id="address-popup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h2>Enter Your Address and Details</h2>
+      <input type="text" id="address" placeholder="Your Address" required>
+      <input type="text" id="phone" placeholder="Phone Number" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <label for="payment">Payment Method:</label>
+      <select id="payment" onchange="toggleCardDetails()">
+        <option value="creditCard">Credit Card</option>
+        <option value="Cash">Cash</option>
+      </select>
+
+      <!-- Card details section -->
+      <div id="card-details-container">
+       <label for="card-number">Card Number:</label>
+       <input type="text" id="card-number" placeholder="Enter card number" required>
+
+       <label for="card-expiry">Expiry Date:</label>
+       <input type="text" id="card-expiry" placeholder="MM/YY" required>
+
+       <label for="card-cvv">CVV:</label>
+       <input type="text" id="card-cvv" placeholder="Enter CVV" required>
+      </div>
+
+      <button id="submit-order" onclick="confirmOrder()">Submit Order</button>
+      <button class="close-btn" onclick="closeAddressPopup()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Popup for order details and confirmation -->
+  <div id="confirmation-popup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h2>Order Confirmed</h2>
+      <p>Order Details:</p>
+      <div id="order-details"></div>
+      <p>Total Amount: Rs.<span id="popup-total-amount"></span></p>
+      <button onclick="closeConfirmationPopup()">Close</button>
+    </div>
+  </div>
+
+  <!-- Rating Popup -->
+  <div id="rating-popup" class="popup" style="display:none;">
+    <div class="popup-content">
+      <h2>Rate Your Order</h2>
+      <label for="rating">Rate (1 to 5):</label>
+      <input type="number" id="rating" min="1" max="5" placeholder="Enter rating" required>
+      <button onclick="submitRating()">Submit Rating</button>
+      <button class="close-btn" onclick="closeRatingPopup()">Cancel</button>
     </div>
   </div>
 
   <script src="script.js"></script>
 </body>
 </html>
+
 
