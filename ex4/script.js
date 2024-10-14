@@ -1,18 +1,18 @@
 const menus = {
   northIndianDhaba: [
-    { name: 'Paneer Butter Masala', price: 250, image: 'images/paneer_butter_masala.jpg' },
-    { name: 'Dal Makhani', price: 180, image: 'images/dal_makhani.jpg' },
-    { name: 'Butter Naan', price: 40, image: 'images/butter_naan.jpg' },
+    { name: 'Paneer Butter Masala', price: 250, image: 'paneer_butter_masala.jpg' },
+    { name: 'Dal Makhani', price: 180, image: 'dal_makhani.jpg' },
+    { name: 'Butter Naan', price: 40, image: 'butter_naan.jpg' },
   ],
   southIndianCafe: [
-    { name: 'Masala Dosa', price: 120, image: 'images/masala_dosa.jpg' },
-    { name: 'Idli Sambhar', price: 80, image: 'images/idli_sambhar.jpg' },
-    { name: 'Vada', price: 50, image: 'images/vada.jpg' },
+    { name: 'Masala Dosa', price: 120, image: 'masala_dosa.jpg' },
+    { name: 'Idli Sambhar', price: 80, image: 'idli_sambhar.jpg' },
+    { name: 'Vada', price: 50, image: 'vada.jpg' },
   ],
   streetFoodBazaar: [
-    { name: 'Pani Puri', price: 50, image: 'images/pani_puri.jpg' },
-    { name: 'Chole Bhature', price: 100, image: 'images/chole_bhature.jpg' },
-    { name: 'Aloo Tikki', price: 60, image: 'images/aloo_tikki.jpg' },
+    { name: 'Pani Puri', price: 50, image: 'pani_puri.jpg' },
+    { name: 'Chole Bhature', price: 100, image: 'chole_bhature.jpg' },
+    { name: 'Aloo Tikki', price: 60, image: 'aloo_tikki.jpg' },
   ],
 };
 
