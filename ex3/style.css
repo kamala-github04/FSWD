@@ -81,11 +81,11 @@ button:hover {
 }
 
 .post-box:hover {
-    background-color: #f1f3f5;
+    background-color: #a4a9ae;
 }
 
 .comment-box {
-    background-color: #f1f3f5;
+    background-color: #aed0f2;
     border-radius: 10px;
     margin-top: 10px;
     padding: 10px;
