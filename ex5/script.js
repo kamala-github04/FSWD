@@ -1,3 +1,4 @@
+
 document.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('loggedIn');
     if (isLoggedIn) {
@@ -17,7 +18,7 @@ function login(e) {
     const password = document.getElementById('password').value;
 
     // Simple authentication (in a real app, use proper authentication methods)
-    if (username === 'kamala' && password === 'kamala') {
+    if (username === 'user' && password === 'password') {
         localStorage.setItem('loggedIn', 'true');
         document.getElementById('app-container').style.display = 'block';
         document.getElementById('login-container').style.display = 'none';
@@ -44,6 +45,7 @@ function loadProducts() {
             <strong>${product.name}</strong>
             <p>Price: $${product.price}</p>
             <p>${product.description}</p>
+            <img src="${product.image}" alt="${product.name}" class="product-image">
             ${product.sold ? 
                 `<p class="sold">Sold</p>` : 
                 `<button onclick="buyProduct(${index})">Buy</button>`}
@@ -58,20 +60,29 @@ function addProduct(e) {
     const productName = document.getElementById('product-name').value;
     const productPrice = document.getElementById('product-price').value;
     const productDescription = document.getElementById('product-description').value;
+    const productImage = document.getElementById('product-image').files[0];
 
-    const product = {
-        name: productName,
-        price: productPrice,
-        description: productDescription,
-        sold: false // Add a sold property
+    const reader = new FileReader();
+    reader.onloadend = () => {
+        const product = {
+            name: productName,
+            price: productPrice,
+            description: productDescription,
+            image: reader.result, // Store image data as a base64 string
+            sold: false // Add a sold property
+        };
+
+        const products = JSON.parse(localStorage.getItem('products')) || [];
+        products.push(product);
+        localStorage.setItem('products', JSON.stringify(products));
+
+        document.getElementById('product-form').reset();
+        loadProducts();
     };
 
-    const products = JSON.parse(localStorage.getItem('products')) || [];
-    products.push(product);
-    localStorage.setItem('products', JSON.stringify(products));
-
-    document.getElementById('product-form').reset();
-    loadProducts();
+    if (productImage) {
+        reader.readAsDataURL(productImage);
+    }
 }
 
 function buyProduct(index) {
