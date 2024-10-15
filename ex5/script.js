@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function login(e) {
     e.preventDefault();
     const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const password = document.getElementById('password').value;      
 
     // Simple authentication (in a real app, use proper authentication methods)
     if (username === 'kamala' && password === 'kamala') {
