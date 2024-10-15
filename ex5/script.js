@@ -18,7 +18,7 @@ function login(e) {
     const password = document.getElementById('password').value;      
 
     // Simple authentication (in a real app, use proper authentication methods)
-    if (username === 'kamala' && password === 'kamala') {
+    if (username === 'kamala' && password === 'kamala') {          
         localStorage.setItem('loggedIn', 'true');
         document.getElementById('app-container').style.display = 'block';
         document.getElementById('login-container').style.display = 'none';
