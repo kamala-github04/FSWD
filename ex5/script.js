@@ -43,7 +43,7 @@ function loadProducts() {
         const li = document.createElement('li');
         li.innerHTML = `
             <strong>${product.name}</strong>
-            <p>Price: $${product.price}</p>
+            <p>Price: Rs.${product.price}</p>
             <p>${product.description}</p>
             <img src="${product.image}" alt="${product.name}" class="product-image">
             ${product.sold ? 
