@@ -79,3 +79,8 @@ li p {
     color: red;
     font-weight: bold;
 }
+
+.message {
+    color: red;
+    text-align: center;
+}
