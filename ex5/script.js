@@ -1,5 +1,37 @@
-document.addEventListener('DOMContentLoaded', loadProducts);
-document.getElementById('product-form').addEventListener('submit', addProduct);
+document.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = localStorage.getItem('loggedIn');
+    if (isLoggedIn) {
+        loadProducts();
+        document.getElementById('app-container').style.display = 'block';
+        document.getElementById('login-container').style.display = 'none';
+    }
+
+    document.getElementById('login-form').addEventListener('submit', login);
+    document.getElementById('product-form').addEventListener('submit', addProduct);
+    document.getElementById('logout-button').addEventListener('click', logout);
+});
+
+function login(e) {
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Simple authentication (in a real app, use proper authentication methods)
+    if (username === 'kamala' && password === 'kamala') {
+        localStorage.setItem('loggedIn', 'true');
+        document.getElementById('app-container').style.display = 'block';
+        document.getElementById('login-container').style.display = 'none';
+        loadProducts();
+    } else {
+        document.getElementById('login-message').innerText = 'Invalid username or password.';
+    }
+}
+
+function logout() {
+    localStorage.removeItem('loggedIn');
+    document.getElementById('app-container').style.display = 'none';
+    document.getElementById('login-container').style.display = 'block';
+}
 
 function loadProducts() {
     const products = JSON.parse(localStorage.getItem('products')) || [];
@@ -42,7 +74,6 @@ function addProduct(e) {
     loadProducts();
 }
 
-// Function to buy a product
 function buyProduct(index) {
     const products = JSON.parse(localStorage.getItem('products'));
     if (products[index]) {
