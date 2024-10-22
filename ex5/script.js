@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.getElementById('login-form').addEventListener('submit', login);
-    document.getElementById('product-form').addEventListener('submit', addProduct);
+    document.getElementById('product-form').addEventListener('submit', addProduct);  
     document.getElementById('logout-button').addEventListener('click', logout);
 });
 
