@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>    
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classifieds App</title>
-    <link rel="stylesheet" href="styles.css">          
+    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-<body> 
+<body>
     <div class="container" id="login-container">
         <h1>Login</h1>
         <form id="login-form">
@@ -24,6 +24,8 @@
             <input type="text" id="product-name" placeholder="Product Name" required>
             <input type="number" id="product-price" placeholder="Price" required>
             <textarea id="product-description" placeholder="Description" required></textarea>
+            <input type="text" id="seller-name" placeholder="Your Name" required>
+            <input type="text" id="seller-contact" placeholder="Your Contact Info" required>
             <input type="file" id="product-image" accept="image/*" required>
             <button type="submit">Add Product</button>
         </form>
