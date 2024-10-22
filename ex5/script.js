@@ -1,4 +1,3 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     const isLoggedIn = localStorage.getItem('loggedIn');
     if (isLoggedIn) {
@@ -15,10 +14,10 @@ document.addEventListener('DOMContentLoaded', () => {
 function login(e) {
     e.preventDefault();
     const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;      
+    const password = document.getElementById('password').value;
 
     // Simple authentication (in a real app, use proper authentication methods)
-    if (username === 'kamala' && password === 'kamala') {          
+    if (username === 'kamala' && password === 'kamala') {
         localStorage.setItem('loggedIn', 'true');
         document.getElementById('app-container').style.display = 'block';
         document.getElementById('login-container').style.display = 'none';
@@ -45,6 +44,7 @@ function loadProducts() {
             <strong>${product.name}</strong>
             <p>Price: Rs.${product.price}</p>
             <p>${product.description}</p>
+            <p>Seller: ${product.seller.name} - Contact: ${product.seller.contact}</p>
             <img src="${product.image}" alt="${product.name}" class="product-image">
             ${product.sold ? 
                 `<p class="sold">Sold</p>` : 
@@ -60,6 +60,8 @@ function addProduct(e) {
     const productName = document.getElementById('product-name').value;
     const productPrice = document.getElementById('product-price').value;
     const productDescription = document.getElementById('product-description').value;
+    const sellerName = document.getElementById('seller-name').value;
+    const sellerContact = document.getElementById('seller-contact').value;
     const productImage = document.getElementById('product-image').files[0];
 
     const reader = new FileReader();
@@ -68,8 +70,12 @@ function addProduct(e) {
             name: productName,
             price: productPrice,
             description: productDescription,
-            image: reader.result, // Store image data as a base64 string
-            sold: false // Add a sold property
+            seller: {
+                name: sellerName,
+                contact: sellerContact,
+            },
+            image: reader.result,
+            sold: false
         };
 
         const products = JSON.parse(localStorage.getItem('products')) || [];
